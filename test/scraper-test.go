@@ -4,16 +4,11 @@ import (
 	"encoding/csv"
 	"fmt"
 	"log"
-	"net/url"
 	"os"
+	"web-scraper/util"
 
 	"github.com/gocolly/colly"
 )
-
-func IsUrl(str string) bool {
-	u, err := url.Parse(str)
-	return err == nil && u.Scheme != "" && u.Host != ""
-}
 
 // initialize a data structure to keep the scraped data
 type Product struct {
@@ -81,9 +76,9 @@ func main() {
 
 		// TODO: add checker if it is a valid url, if not make it into valid url
 		url := element.ChildAttr("a", "href")
-		if !IsUrl(url) {
+		if !util.IsUrl(url) {
 			url = "https://pcx.com.ph/collections/graphics-cards" + url
-			if !IsUrl(url) {
+			if !util.IsUrl(url) {
 				panic("url stll not valid even after adding base path")
 			}
 		}
@@ -102,7 +97,7 @@ func main() {
 		// fmt.Println(r.Request.URL, " scraped")
 
 		// open the CSV file
-		file, err := os.Create("products.csv")
+		file, err := os.Create("test-products.csv")
 		if err != nil {
 			log.Fatalln("Failed to create output CSV file", err)
 		}
